@@ -1,4 +1,4 @@
-import User from "../models/User";
+import User from "../models/User.js";
 
 export const getMyProfile = async(request, response) => {
     try {
@@ -17,4 +17,4 @@ export const getAllUsers = async (request, response) => {
   } catch (err) {
     res.status(500).json({ message: 'Failed to fetch users', error: err });
   }
-};
+};  
