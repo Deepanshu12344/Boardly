@@ -15,7 +15,7 @@ router.post('/add', verifyToken, addProject);
 
 router.get('/get', verifyToken, getAllProjects);
 
-router.get('/:projectId', verifyToken, getProjectDetails);
+router.get('/project/:projectId', verifyToken, getProjectDetails);
 
 router.delete('/:projectId', verifyToken, deleteProject);
 

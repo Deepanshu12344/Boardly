@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useAuth } from '../../contexts/AuthContext';
 import { LogOut, FolderOpen, KanbanSquare, Plus, User } from 'lucide-react';
 import Projects from '../Projects/Projects';
@@ -16,12 +17,24 @@ const Dashboard = () => {
     loadData();
   }, []);
 
-  const loadData = () => {
-    const storedProjects = JSON.parse(localStorage.getItem('projects') || '[]');
-    const storedTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
-    setProjects(storedProjects);
-    setTasks(storedTasks);
-  };
+const loadData = async () => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await axios.get('http://localhost:8000/api/get', {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log("API Response:", res.data);
+    const backendProjects = res.data || [];
+    setProjects(backendProjects);
+  } catch (err) {
+    console.error('Failed to load projects from API:', err);
+    setProjects([]);
+  }
+};
+
 
   const handleCreateProject = (projectData) => {
     const newProject = {

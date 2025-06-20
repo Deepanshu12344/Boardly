@@ -238,6 +238,7 @@
 
 
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, User, Plus, CheckCircle, Clock, AlertCircle, Circle } from 'lucide-react';
 import { useAuth } from '../../contexts/AuthContext';
@@ -253,20 +254,33 @@ const ProjectDetails = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    loadProjectData();
+    if (id) {
+      fetch(`/api/projects/${id}`)
+        .then(res => res.json())
+        .then(data => console.log(data))
+        .catch(err => console.error(err));
+    }
   }, [id]);
 
-  const loadProjectData = () => {
-    const projects = JSON.parse(localStorage.getItem('projects') || '[]');
-    const allTasks = JSON.parse(localStorage.getItem('tasks') || '[]');
 
-    const foundProject = projects.find(p => p.id === id);
-    const projectTasks = allTasks.filter(t => t.projectId === id);
+const loadProjectData = async (id) => {
+  try {
+    const token = localStorage.getItem('token');
+    const res = await axios.get(`http://localhost:8000/api/project/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-    setProject(foundProject);
-    setTasks(projectTasks);
+    setProject(res.data); // assumes API returns single project object
+    setTasks(res.data.tasks || []); // or handle tasks separately if needed
     setLoading(false);
-  };
+  } catch (error) {
+    console.error('Error loading project:', error);
+    setLoading(false);
+  }
+};
+
 
   const handleCreateTask = (taskData) => {
     const newTask = {
