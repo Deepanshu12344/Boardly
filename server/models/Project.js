@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import Task from './Task';
 
 const projectSchema = new mongoose.Schema(
   {
@@ -25,5 +26,10 @@ const projectSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+projectSchema.pre('remove', async function (next) {
+  await Task.deleteMany({ project: this._id });
+  next();
+});
 
 export default mongoose.model('Project', projectSchema);

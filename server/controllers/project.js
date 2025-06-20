@@ -57,4 +57,46 @@ export const getProjectDetails = async(request, response) => {
         console.log(error);
         response.status(500).send("Internal Server Error");
     }
-}
+};
+
+export const deleteProject = async(request, response) => {
+    try {
+        const {projectId} = request.params;
+        const userId = request.user.id;
+
+        const project = await Project.findOne({ _id: projectId });
+
+        if (!project) return response.status(404).send("Project not found");
+        if (project.owner.toString() !== userId)
+        return response.status(403).send("Only the owner can delete this project");
+
+        await Project.remove();
+        response.status(200).send("Project and its tasks deleted");
+    } catch (error) {
+        console.log(error);
+        response.status(500).send("Internal Server Error");
+    }
+};
+
+export const updateProject = async (request, response) => {
+  try {
+    const { projectId } = request.params;
+    const { name, description } = request.body;
+    const userId = request.user.id;
+
+    const project = await Project.findOne({ _id: projectId });
+
+    if (!project) return response.status(404).send("Project not found");
+    if (project.owner.toString() !== userId)
+      return response.status(403).send("Only the owner can update this project");
+
+    project.name = name || project.name;
+    project.description = description || project.description;
+
+    const updated = await project.save();
+    response.status(200).json(updated);
+  } catch (error) {
+    console.error(error);
+    response.status(500).send("Internal Server Error");
+  }
+};
