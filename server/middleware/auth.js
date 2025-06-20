@@ -9,7 +9,7 @@ export const verifyToken = async(request, response, next)=>{
             token = token.slice(7, token.length).trimLeft();
         }
 
-        const verified = jwt.verify(token, process.env.SECRET);
+        const verified = jwt.verify(token, process.env.JWT_SECRET);
         request.user = verified;
         next();
     } catch (error) {

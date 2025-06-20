@@ -34,7 +34,7 @@ export const login = async(request, response) =>{
         
         const matched = await bcrypt.compare(password, user.password);
         if(!matched) return response.status(404).send('Invalid Credentials');
-        const token = jwt.sign({id:user._id}, process.env.SECRET);
+        const token = jwt.sign({id:user._id}, process.env.JWT_SECRET);
         delete user.password;
 
         response.status(200).json({token,user});

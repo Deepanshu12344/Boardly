@@ -11,9 +11,9 @@ import { verifyToken } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/', verifyToken, addProject);
+router.post('/add', verifyToken, addProject);
 
-router.get('/', verifyToken, getAllProjects);
+router.get('/get', verifyToken, getAllProjects);
 
 router.get('/:projectId', verifyToken, getProjectDetails);
 
