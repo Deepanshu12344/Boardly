@@ -5,7 +5,23 @@ import { Calendar, User, FolderOpen, ArrowRight } from 'lucide-react';
 const Projects = ({ projects, onUpdateProjects }) => {
   const navigate = useNavigate();
 
-  const handleViewProject = (projectId) => {
+  const handleViewProject = (project) => {
+    // Debug: Log the entire project object
+    console.log('Full project object:', project);
+    console.log('project.id:', project.id);
+    console.log('project._id:', project._id);
+    console.log('All project keys:', Object.keys(project));
+    
+    // Try different possible ID fields
+    const projectId = project.id || project._id || project.projectId;
+    
+    if (!projectId) {
+      console.error('No valid project ID found in:', project);
+      alert('Error: Project ID not found');
+      return;
+    }
+    
+    console.log('Navigating to project:', projectId);
     navigate(`/project/${projectId}`);
   };
 
@@ -29,13 +45,16 @@ const Projects = ({ projects, onUpdateProjects }) => {
     );
   }
 
+  // Debug: Log all projects to see their structure
+  console.log('All projects:', projects);
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      {projects.map((project) => (
+      {projects.map((project, index) => (
         <div
-          key={project.id}
-          className="bg-white border border-gray-200 rounded-xl shadow p-6 cursor-pointer"
-          onClick={() => handleViewProject(project.id)}
+          key={project.id || project._id || index} // Fallback key
+          className="bg-white border border-gray-200 rounded-xl shadow p-6 cursor-pointer hover:shadow-lg transition-shadow"
+          onClick={() => handleViewProject(project)}
         >
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1">
@@ -44,6 +63,10 @@ const Projects = ({ projects, onUpdateProjects }) => {
               </h3>
               <p className="text-gray-600 text-sm line-clamp-3">
                 {project.description}
+              </p>
+              {/* Debug: Show the ID in the UI temporarily */}
+              <p className="text-xs text-red-500 mt-1">
+                Debug - ID: {project.id || project._id || 'No ID found'}
               </p>
             </div>
             <ArrowRight className="w-5 h-5 text-gray-400 ml-2 flex-shrink-0" />
