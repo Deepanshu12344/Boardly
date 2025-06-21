@@ -241,9 +241,9 @@ const ProjectDetails = () => {
                       {task.dueDate && (
                         <span>Due: {formatDate(task.dueDate)}</span>
                       )}
-                      {task.assignedTo && (
+                      {/* {task.assignedTo && (
                         <span>Assigned to: {task.assignedTo}</span>
-                      )}
+                      )} */}
                     </div>
                     {task.tags && task.tags.length > 0 && (
                       <div className="flex space-x-1">

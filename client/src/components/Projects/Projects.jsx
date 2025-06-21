@@ -65,9 +65,9 @@ const Projects = ({ projects, onUpdateProjects }) => {
                 {project.description}
               </p>
               {/* Debug: Show the ID in the UI temporarily */}
-              <p className="text-xs text-red-500 mt-1">
+              {/* <p className="text-xs text-red-500 mt-1">
                 Debug - ID: {project.id || project._id || 'No ID found'}
-              </p>
+              </p> */}
             </div>
             <ArrowRight className="w-5 h-5 text-gray-400 ml-2 flex-shrink-0" />
           </div>

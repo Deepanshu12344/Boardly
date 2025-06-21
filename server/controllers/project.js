@@ -57,10 +57,8 @@ export const getProjectDetails = async (request, response) => {
 
     if (!project) return response.status(404).send("Project not found");
 
-    const tasks = await Task.find({ project: projectId }).populate(
-      "assignedTo",
-      "name email"
-    );
+    // FIXED: Removed invalid populate call
+    const tasks = await Task.find({ project: projectId });
 
     response.status(200).json({ ...project.toObject(), tasks });
   } catch (error) {
@@ -68,6 +66,7 @@ export const getProjectDetails = async (request, response) => {
     response.status(500).send("Internal Server Error");
   }
 };
+
 
 export const deleteProject = async (request, response) => {
   try {

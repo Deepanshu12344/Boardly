@@ -46,12 +46,13 @@ const TaskBoard = ({ tasks, projects, onUpdateTasks }) => {
           <p className="text-gray-600">Manage all your tasks across projects</p>
         </div>
         <button
-          onClick={() => setShowCreateTask(true)}
-          className="flex items-center space-x-2 bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 py-2 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-[1.02] shadow-lg"
-        >
-          <Plus className="w-4 h-4" />
-          <span>Add Task</span>
-        </button>
+  onClick={() => setShowCreateTask(true)}
+  className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-md"
+>
+  <Plus className="w-4 h-4" />
+  <span>Add Task</span>
+</button>
+
       </div>
 
       {/* Kanban Board */}

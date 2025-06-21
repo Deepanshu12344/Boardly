@@ -5,7 +5,8 @@ import {
   getTaskById,
   updateTask,
   deleteTask,
-  updateTaskStatus
+  updateTaskStatus,
+  getTasksByProjectId
 } from '../controllers/task.js';
 
 import { verifyToken } from '../middleware/auth.js';
@@ -19,6 +20,8 @@ router.get('/tasks', verifyToken, getAllTasks);
 router.get('/task/:taskId', verifyToken, getTaskById);
 
 router.put('/task/:taskId', verifyToken, updateTask);
+
+router.get('/project/:projectId', verifyToken, getTasksByProjectId);
 
 router.delete('/task/:taskId', verifyToken, deleteTask);
 

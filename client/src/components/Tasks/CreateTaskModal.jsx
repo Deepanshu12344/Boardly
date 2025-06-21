@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Plus, Calendar, User, Tag, FileText } from 'lucide-react';
+import { X, Plus, Calendar, Tag, FileText } from 'lucide-react';
 
 const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }) => {
   const [formData, setFormData] = useState({
@@ -7,10 +7,10 @@ const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }
     description: '',
     projectId: projectId || '',
     status: 'Backlog',
-    assignedTo: '',
     dueDate: '',
     tags: ''
   });
+
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -42,7 +42,6 @@ const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }
         ...formData,
         name: formData.name.trim(),
         description: formData.description.trim(),
-        assignedTo: formData.assignedTo.trim() || null,
         tags: formData.tags ? formData.tags.split(',').map(tag => tag.trim()).filter(tag => tag) : []
       };
       onSubmit(taskData);
@@ -64,9 +63,9 @@ const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }
       <div className="bg-white/90 backdrop-blur-lg rounded-2xl shadow-2xl w-full max-w-2xl border border-white/20 max-h-[90vh] overflow-y-auto">
         <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white/90 backdrop-blur-lg">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg flex items-center justify-center">
+            {/* <div className="w-10 h-10 bg-gradient-to-r from-green-500 to-teal-600 rounded-lg flex items-center justify-center">
               <Plus className="w-5 h-5 text-white" />
-            </div>
+            </div> */}
             <h2 className="text-xl font-semibold text-gray-900">
               Create New Task {projectName && `for ${projectName}`}
             </h2>
@@ -141,6 +140,7 @@ const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }
                   ))}
                 </select>
               </div>
+
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Due Date</label>
                 <div className="relative">
@@ -157,38 +157,21 @@ const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }
               </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Assigned To</label>
-                <div className="relative">
-                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    name="assignedTo"
-                    value={formData.assignedTo}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                    placeholder="Enter assignee name"
-                    maxLength={50}
-                  />
-                </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
+              <div className="relative">
+                <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  name="tags"
+                  value={formData.tags}
+                  onChange={handleChange}
+                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
+                  placeholder="frontend, urgent, api (comma separated)"
+                  maxLength={100}
+                />
               </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Tags</label>
-                <div className="relative">
-                  <Tag className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                  <input
-                    type="text"
-                    name="tags"
-                    value={formData.tags}
-                    onChange={handleChange}
-                    className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all"
-                    placeholder="frontend, urgent, api (comma separated)"
-                    maxLength={100}
-                  />
-                </div>
-                <p className="mt-1 text-sm text-gray-500">Separate tags with commas</p>
-              </div>
+              <p className="mt-1 text-sm text-gray-500">Separate tags with commas</p>
             </div>
 
             {errors.submit && (
@@ -207,12 +190,13 @@ const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }
               Cancel
             </button>
             <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 bg-gradient-to-r from-green-500 to-teal-600 text-white px-4 py-3 rounded-lg hover:from-green-600 hover:to-teal-700 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed font-medium"
-            >
-              {loading ? 'Creating...' : 'Create Task'}
-            </button>
+  type="submit"
+  disabled={loading}
+  className="flex-1 bg-green-600 text-white px-4 py-3 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed font-medium"
+>
+  {loading ? 'Creating...' : 'Create Task'}
+</button>
+
           </div>
         </form>
       </div>
@@ -221,4 +205,3 @@ const CreateTaskModal = ({ onClose, onSubmit, projects, projectId, projectName }
 };
 
 export default CreateTaskModal;
-  

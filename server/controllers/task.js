@@ -2,11 +2,11 @@ import Task from "../models/Task.js";
 
 export const createTask = async(request, response) => {
     try {
-        const {project, name, description, status, tags, dueDate, assignedTo} = request.body;
+        const {project, name, description, status, tags, dueDate} = request.body;
         if(!project || !name) return response.status(400).send("project and task name is requestuired");
 
         const task = new Task({
-            project, name, description, status, tags, dueDate, assignedTo
+            project, name, description, status, tags, dueDate
         });
         const savedTask = await task.save();
         response.status(201).json(savedTask);
@@ -20,7 +20,7 @@ export const getAllTasks = async(request, response) => {
     try {
         const {projectId} = request.query;
         const filter = projectId ? { project: projectId } : {};
-        const tasks = await Task.find(filter).populate('assignedTo', 'name email');
+        const tasks = await Task.find(filter).populate('name email');
         response.status(200).json(tasks)
     } catch (error) {
         console.log(error);
@@ -30,7 +30,7 @@ export const getAllTasks = async(request, response) => {
 
 export const getTaskById = async(request, response) => {
     try {
-        const task = await Task.findById(request.params.taskId).populate('assignedTo', 'name email');
+        const task = await Task.findById(request.params.taskId).populate('name email');
         if (!task) return response.status(404).send("Task not found");
         response.status(200).json(task);
     } catch (error) {
@@ -78,5 +78,22 @@ export const updateTaskStatus = async (request, response) => {
   } catch (error) {
     console.error(error);
     response.status(500).send("Internal Server Error");
+  }
+};
+
+export const getTasksByProjectId = async (req, res) => {
+  const { projectId } = req.params;
+
+  if (!projectId) {
+    return res.status(400).json({ error: 'Project ID is required' });
+  }
+
+  try {
+    const tasks = await Task.find({ project: projectId }).sort({ createdAt: -1 });
+
+    return res.status(200).json(tasks);
+  } catch (error) {
+    console.error('Error fetching tasks for project:', error);
+    return res.status(500).json({ error: 'Failed to fetch tasks for the project' });
   }
 };
